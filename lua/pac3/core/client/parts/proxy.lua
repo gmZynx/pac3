@@ -219,6 +219,20 @@ PART.Inputs.property = function(self, property_name, field)
 	return 0
 end
 
+PART.Inputs.polynomial = function(self, x, ...)
+	x = x or 1
+	local total = 0
+	local args = { ... }
+
+	pow = 0
+	for _, coefficient in ipairs(args) do
+		total = total + coefficient*math.pow(x, pow)
+		pow = pow + 1
+	end
+	return total
+
+end
+
 PART.Inputs.owner_position = function(self)
 	local owner = get_owner(self)
 
