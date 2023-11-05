@@ -1,3 +1,4 @@
+CreateClientConVar("pac_editor_scale","1", true, false)
 local L = pace.LanguageString
 
 local PANEL = {}
@@ -8,7 +9,7 @@ PANEL.Base = "pac_dtree"
 function PANEL:Init()
 	pace.pac_dtree.Init(self)
 
-	self:SetLineHeight(18)
+	self:SetLineHeight(18 * GetConVar("pac_editor_scale"):GetFloat())
 	self:SetIndentSize(10)
 
 	self.parts = {}
@@ -156,8 +157,8 @@ do
 				if not node.Icon.event_icon then
 					local pnl = vgui.Create("DImage", node.Icon)
 					pnl:SetImage("icon16/clock_red.png")
-					pnl:SetSize(8, 8)
-					pnl:SetPos(8, 8)
+					pnl:SetSize(8*(1 + 0.5*(GetConVar("pac_editor_scale"):GetFloat()-1)), 8*(1 + 0.5*(GetConVar("pac_editor_scale"):GetFloat()-1)))
+					pnl:SetPos(8*(1 + 0.5*(GetConVar("pac_editor_scale"):GetFloat()-1)), 8*(1 + 0.5*(GetConVar("pac_editor_scale"):GetFloat()-1)))
 					pnl:SetVisible(false)
 					node.Icon.event_icon = pnl
 				end
@@ -352,7 +353,7 @@ function PANEL:AddNode(...)
 
 	local add_button = node:Add("DImageButton")
 	add_button:SetImage(pace.MiscIcons.new)
-	add_button:SetSize(16, 16)
+	add_button:SetSize(16*GetConVar("pac_editor_scale"):GetFloat(), 16*GetConVar("pac_editor_scale"):GetFloat())
 	add_button:SetVisible(false)
 	add_button.DoClick = function() add_parts_menu(node) pace.Call("PartSelected", node.part) end
 	add_button.DoRightClick = function() node:DoRightClick() end
@@ -454,6 +455,7 @@ function PANEL:PopulateParts(node, parts, children)
 			elseif isstring(part.Icon) then
 				part_node.Icon:SetImage(part.Icon)
 			end
+			part_node.Icon:SetSize(16 * GetConVar("pac_editor_scale"):GetFloat(),16 * GetConVar("pac_editor_scale"):GetFloat())
 
 			self:PopulateParts(part_node, part:GetChildren(), true)
 
@@ -499,8 +501,8 @@ end
 
 function PANEL:Populate(reset)
 
-	self:SetLineHeight(18)
-	self:SetIndentSize(2)
+	self:SetLineHeight(18 * (1 + (GetConVar("pac_editor_scale"):GetFloat()-1)))
+	self:SetIndentSize(10)
 
 	for key, node in pairs(self.parts) do
 		if reset or (not node.part or not node.part:IsValid()) then
