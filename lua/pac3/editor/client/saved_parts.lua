@@ -205,6 +205,42 @@ function pace.LoadParts(name, clear, override_part)
 			name = name:gsub("%.txt", "")
 
 			local data,err = pace.luadata.ReadFile("pac3/" .. name .. ".txt")
+			local has_possible_prop_pacs = false
+
+			if data and istable(data) then
+				for i,part in pairs(data) do
+					if isnumber(tonumber(part.self.OwnerName)) then has_possible_prop_pacs = true end
+				end
+			end
+
+			--queue up prop pacs for the next prop or npc you spawn when in singleplayer
+			if (auto_spawn_prop:GetInt() == 2 or (auto_spawn_prop:GetInt() == 1 and #data == 1)) and game.SinglePlayer() and has_possible_prop_pacs then
+				if clear then pace.ClearParts() end
+				LocalPlayer().pac_propload_queuedparts = LocalPlayer().pac_propload_queuedparts or {}
+
+				--check all root parts from data. format: each data member is a {self, children} table of the part and the list of children
+				for i,part in pairs(data) do
+					local possible_prop_pac = isnumber(tonumber(part.self.OwnerName))
+					if part.self.ClassName == "group" and possible_prop_pac then
+
+						part.self.ModelTracker = part.self.ModelTracker or ""
+						part.self.ClassTracker = part.self.ClassTracker or ""
+						local str = ""
+						if part.self.ClassTracker == "" or part.self.ClassTracker == "" then
+							str = "But the class or model is unknown"
+						else
+							str = part.self.ClassTracker .. " : " .. part.self.ModelTracker
+						end
+						--notify which model / entity should be spawned with the class tracker
+						notification.AddLegacy( "You have queued a pac part (" .. i .. ":" .. part.self.Name .. ") for a prop or NPC! " .. str, NOTIFY_HINT, 10 )
+						LocalPlayer().pac_propload_queuedparts[i] = part
+
+					else
+						pace.LoadPartsFromTable(part, false, false)
+					end
+				end
+				
+			else
 
 			if name == "autoload" and (not data or not next(data)) then
 				local err
@@ -220,7 +256,11 @@ function pace.LoadParts(name, clear, override_part)
 				return
 			end
 
+				
 			pace.LoadPartsFromTable(data, clear, override_part)
+
+			end
+			
 		end
 	end
 end
