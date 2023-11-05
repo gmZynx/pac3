@@ -31,6 +31,7 @@ BUILDER
 	:StartStorableVars()
 		:SetPropertyGroup("generic")
 			:GetSet("Name", "")
+			:GetSet("Notes", "")
 			:GetSet("Hide", false)
 			:GetSet("EditorExpand", false, {hidden = true})
 			:GetSet("UniqueID", "", {hidden = true})
