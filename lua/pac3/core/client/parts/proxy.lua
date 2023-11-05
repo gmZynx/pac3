@@ -940,6 +940,9 @@ net.Receive("pac_proxy", function()
 	if ply:IsValid() then
 		ply.pac_proxy_events = ply.pac_proxy_events or {}
 		ply.pac_proxy_events[str] = {name = str, x = x, y = y, z = z}
+		if LocalPlayer() == ply then
+			pac.Message("pac_proxy -> command(\""..str.."\") is " .. x .. "," .. y .. "," .. z)
+		end
 	end
 end)
 
@@ -1098,6 +1101,15 @@ function PART:OnThink()
 			return
 		end
 	end
+
+	--foolproofing: scream at the user if they didn't set a variable name
+	if self == pace.current_part then self.touched = true end
+	if self ~= pace.current_part and self.VariableName == "" and self.touched then
+		self:AttachEditorPopup("You forgot to set a variable name! The proxy won't work until it knows where to send the math!", true)
+		pace.FlashNotification("An edited proxy still has no variable name! The proxy won't work until it knows where to send the math!")
+		self:SetWarning("You forgot to set a variable name! The proxy won't work until it knows where to send the math!")
+		self.touched = false
+	elseif self.VariableName ~= "" then self:SetWarning() end
 
 	self:CalcVelocity()
 
