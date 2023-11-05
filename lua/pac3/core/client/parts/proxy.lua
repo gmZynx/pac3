@@ -1093,7 +1093,11 @@ end
 function PART:OnThink()
 	local part = self:GetTarget()
 	if not part:IsValid() then return end
-	if part.ClassName == 'woohoo' then return end
+	if part.ClassName == 'woohoo' then
+		if self.VariableName == "Resolution" or self.VariableName == "BlurFiltering" and self.touched then
+			return
+		end
+	end
 
 	self:CalcVelocity()
 
