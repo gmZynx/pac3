@@ -40,7 +40,7 @@ do -- bones
 	function PART:GetBonePosition()
 		local parent = self:GetParent()
 		if parent:IsValid() then
-			if parent.ClassName == "jiggle" then
+			if parent.ClassName == "jiggle" or parent.ClassName == "interpolated_multibone" then
 				return parent.pos, parent.ang
 			elseif
 				not parent.is_model_part and
@@ -64,11 +64,13 @@ do -- bones
 
 	function PART:GetBoneMatrix()
 		local parent = self:GetParent()
-		if parent:IsValid() then
-			if parent.ClassName == "jiggle" then
+		if parent:IsValid() or IsValid(parent) then
+			if parent.ClassName == "jiggle" or parent.ClassName == "interpolated_multibone" then
 				local bone_matrix = Matrix()
-				bone_matrix:SetTranslation(parent.pos)
-				bone_matrix:SetAngles(parent.ang)
+				if parent.pos then
+					bone_matrix:SetTranslation(parent.pos)
+					bone_matrix:SetAngles(parent.ang)
+				end
 				return bone_matrix
 			elseif
 				not parent.is_model_part and
