@@ -27,7 +27,7 @@ function MUTATOR:WriteArguments(multiplier, other)
 end
 
 function MUTATOR:ReadArguments()
-	local multiplier = math.Clamp(net.ReadFloat(), 0.1, 10)
+	local multiplier = math.Clamp(net.ReadFloat(), 0.5, 2)
 	local other = false
 	local hidden_state
 
@@ -84,36 +84,6 @@ function MUTATOR:Mutate(multiplier, other, hidden_state)
 					setter(ent, original * multiplier)
 				end
 			end
-		end
-	end
-
-	if ent.SetHull and ent.SetHullDuck and ent.ResetHull then
-		if other then
-			local smin, smax = Vector(), Vector()
-			local cmin, cmax = Vector(), Vector()
-
-			local w = math.Clamp(other.HullWidth or 32, 1, 4096)
-
-			smin.x = -w / 2
-			smax.x = w / 2
-			smin.y = -w / 2
-			smax.y = w / 2
-
-			cmin.x = -w / 2
-			cmax.x = w / 2
-			cmin.y = -w / 2
-			cmax.y = w / 2
-
-			smin.z = 0
-			smax.z = math.Clamp(other.StandingHullHeight or 72, 1, 4096)
-
-			cmin.z = 0
-			cmax.z = math.Clamp(other.CrouchingHullHeight or 36, 1, 4096)
-
-			ent:SetHull(smin, smax)
-			ent:SetHullDuck(cmin, cmax)
-		else
-			ent:ResetHull()
 		end
 	end
 end

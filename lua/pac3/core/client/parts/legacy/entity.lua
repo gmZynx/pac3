@@ -164,7 +164,7 @@ function PART:UpdateScale(ent)
 
 	if ent:IsPlayer() or ent:IsNPC() then
 		if self:GetPlayerOwner() == pac.LocalPlayer then
-			pac.emut.MutateEntity(self:GetPlayerOwner(), "size", ent, self.Size)
+			pac.emut.MutateEntity(self:GetPlayerOwner(), "size", ent, math.Clamp(self.Size, 0.5, 2))
 		end
 		pac.SetModelScale(ent, self.Scale)
 	else

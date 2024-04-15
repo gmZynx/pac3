@@ -779,7 +779,7 @@ function PART:ApplyMatrix()
 	end
 
 	if ent:IsPlayer() or ent:IsNPC() then
-		pac.emut.MutateEntity(self:GetPlayerOwner(), "size", ent, self.Size, {
+		pac.emut.MutateEntity(self:GetPlayerOwner(), "size", ent, math.Clamp( self.Size, 0.5, 2 ), {
 			StandingHullHeight = self.StandingHullHeight,
 			CrouchingHullHeight = self.CrouchingHullHeight,
 			HullWidth = self.HullWidth,
