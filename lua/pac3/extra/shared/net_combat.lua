@@ -329,18 +329,20 @@ if SERVER then
 	local function PlayerIsCombatAllowed(ply)
 		if pace.IsBanned(ply) then return false end
 		if ulx and (ply.frozen or ply.jail) then return false end
-		if pac.global_combat_whitelist[string.lower(ply:SteamID())] then
-			if pac.global_combat_whitelist[string.lower(ply:SteamID())].permission == "Allowed" then return true end
-			if pac.global_combat_whitelist[string.lower(ply:SteamID())].permission == "Banned" then return false end
+		local sid = string.lower( ply:SteamID() )
+		
+		if pac.global_combat_whitelist[ sid ] then
+			if pac.global_combat_whitelist[ sid ].permission == "Allowed" then return true end
+			if pac.global_combat_whitelist[ sid ].permission == "Banned" then return false end
 		end
 
 		if global_combat_whitelisting:GetBool() then --if server uses the high-trust whitelisting mode
-			if pac.global_combat_whitelist[string.lower(ply:SteamID())] then
-				if pac.global_combat_whitelist[string.lower(ply:SteamID())].permission ~= "Allowed" then return false end --if player is not in whitelist, stop!
+			if pac.global_combat_whitelist[ sid ] then
+				if pac.global_combat_whitelist[ sid ].permission ~= "Allowed" then return false end --if player is not in whitelist, stop!
 			end
 		else --if server uses the default, blacklisting mode
-			if pac.global_combat_whitelist[string.lower(ply:SteamID())] then
-				if pac.global_combat_whitelist[string.lower(ply:SteamID())].permission == "Banned" then return false end --if player is in blacklist, stop!
+			if pac.global_combat_whitelist[ sid ] then
+				if pac.global_combat_whitelist[ sid ].permission == "Banned" then return false end --if player is in blacklist, stop!
 			end
 		end
 
