@@ -119,7 +119,6 @@ local function populate_options(menu)
 	menu:AddCVar(L"enable shift+move/rotate clone", "pac_grab_clone", "1", "0")
 	menu:AddCVar(L"remember editor position", "pac_editor_remember_position", "1", "0")
 	menu:AddCVar(L"remember divider position", "pac_editor_remember_divider_height", "1", "0")
-	menu:AddCVar(L"ask before loading autoload", "pac_prompt_for_autoload", "1", "0")
 
 	local prop_pac_load_mode, pnlpplm = menu:AddSubMenu("(singleplayer only) How to handle prop/npc outfits", function() end)
 		prop_pac_load_mode.GetDeleteSelf = function() return false end
