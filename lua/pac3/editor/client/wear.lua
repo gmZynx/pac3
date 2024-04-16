@@ -281,19 +281,19 @@ do
 		else
 			local autoload_file = "autoload"
 			local autoload_result = hook.Run("PAC3Autoload", autoload_file)
-			
+
 			if autoload_result ~= false then
 				if isstring(autoload_result) then
 					autoload_file = autoload_result
 				end
-			
+				
 				pac.Message("Wearing " .. autoload_file .. "...")
 				pace.LoadParts(autoload_file)
 				pace.WearParts()
 			end
 		end
 
-		pac.RemoveHook("Think", "pac_request_outfits")
+		pac.RemoveHook("Think", "request_outfits")
 		pac.Message("Requesting outfits in 8 seconds...")
 
 		timer.Simple(8, function()
