@@ -110,7 +110,7 @@ pac.sounds_draw_dist_sqr = math.pow(GetConVar("pac_limit_sounds_draw_distance"):
 
 CreateClientConVar("pac_volume", 1, true, false, "Overall multiplier for PAC3 sounds",0,1)
 cvars.AddChangeCallback("pac_volume", function(_,_,val)
-	pac.volume = math.pow(math.Clamp(val,0,1),2) --adjust for the nonlinearity of volume
+	pac.volume = math.Clamp(tonumber(val) or 0, 0, 1) ^ 2 --adjust for the nonlinearity of volume
 	pac.ForceUpdateSoundVolumes()
 end)
 
